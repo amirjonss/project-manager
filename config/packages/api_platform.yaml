@@ -1,6 +1,6 @@
 api_platform:
-    title: 'Project name'
-    description: 'Project description'
+    title: 'Project Manager'
+    description: 'This project for project management'
     version: '0.0.1'
 
     mapping:
