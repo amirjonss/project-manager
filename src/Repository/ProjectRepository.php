@@ -19,6 +19,45 @@ class ProjectRepository extends ServiceEntityRepository
     //    /**
     //     * @return Project[] Returns an array of Project objects
     //     */
+        public function getAvgAgeProjectEmployees(Project $project): int
+        {
+            $result = $this->createQueryBuilder('p')
+                ->select('AVG(pe.age)')
+                ->leftJoin('p.employees', 'pe')
+                ->andWhere('p.id = :id')
+                ->setParameter('id', $project->getId())
+                ->getQuery()
+                ->getSingleScalarResult()
+            ;
+
+            if ($result !== null) {
+                return $result;
+            }
+
+            return 0;
+        }
+
+    public function getProjectCountEmployees(Project $project): int
+    {
+        $result = $this->createQueryBuilder('p')
+            ->select('COUNT(pe.id)')
+            ->leftJoin('p.employees', 'pe')
+            ->andWhere('p.id = :id')
+            ->setParameter('id', $project->getId())
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        if ($result !== null) {
+            return $result;
+        }
+
+        return 0;
+    }
+
+    //    /**
+    //     * @return Project[] Returns an array of Project objects
+    //     */
     //    public function findByExampleField($value): array
     //    {
     //        return $this->createQueryBuilder('p')

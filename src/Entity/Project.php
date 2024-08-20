@@ -8,7 +8,9 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Component\Project\Dto\GetStatisticsDto;
 use App\Controller\CreateProjectAction;
+use App\Controller\GetStatisticsAction;
 use App\Repository\ProjectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -19,6 +21,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Get(),
+        new Get(
+            uriTemplate: 'projects/{id}/statistics',
+            controller: GetStatisticsAction::class,
+            output: GetStatisticsDto::class,
+        ),
         new GetCollection(),
         new Post(
             controller: CreateProjectAction::class

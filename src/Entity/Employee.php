@@ -73,6 +73,10 @@ class Employee
     #[Groups(['employee:read', 'employee:put'])]
     private Collection $projects;
 
+    #[ORM\Column(nullable: true)]
+    #[Groups(['employee:read', 'employee:write', 'employee:put'])]
+    private ?int $age = null;
+
     public function __construct()
     {
         $this->projects = new ArrayCollection();
@@ -166,6 +170,18 @@ class Employee
         if ($this->projects->removeElement($project)) {
             $project->removeEmployee($this);
         }
+
+        return $this;
+    }
+
+    public function getAge(): ?int
+    {
+        return $this->age;
+    }
+
+    public function setAge(?int $age): static
+    {
+        $this->age = $age;
 
         return $this;
     }
