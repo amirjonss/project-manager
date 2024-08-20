@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
+use App\Component\Employee\EmployeeType;
 use App\Repository\EmployeeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -75,7 +76,17 @@ class Employee
 
     #[ORM\Column(nullable: true)]
     #[Groups(['employee:read', 'employee:write', 'employee:put'])]
+    #[Assert\Positive]
     private ?int $age = null;
+
+    #[ORM\Column]
+    #[Assert\Choice(choices: [
+        EmployeeType::DEVELOPER->value,
+        EmployeeType::DEVOPS->value,
+        EmployeeType::ADMINISTRATOR->value
+    ])]
+    #[Groups(['employee:read', 'employee:write', 'employee:put'])]
+    private ?int $position = null;
 
     public function __construct()
     {
@@ -182,6 +193,18 @@ class Employee
     public function setAge(?int $age): static
     {
         $this->age = $age;
+
+        return $this;
+    }
+
+    public function getPosition(): ?int
+    {
+        return $this->position;
+    }
+
+    public function setPosition(int $position): static
+    {
+        $this->position = $position;
 
         return $this;
     }
