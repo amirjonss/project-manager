@@ -7,6 +7,8 @@ use App\Repository\EmployeeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
 #[ApiResource]
@@ -18,9 +20,13 @@ class Employee
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 3, max: 255)]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 3, max: 255)]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -31,7 +37,8 @@ class Employee
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $users = null;
+    #[Assert\NotBlank]
+    private ?User $user = null;
 
     /**
      * @var Collection<int, Project>
@@ -97,14 +104,14 @@ class Employee
         return $this;
     }
 
-    public function getUsers(): ?User
+    public function getUser(): ?User
     {
-        return $this->users;
+        return $this->user;
     }
 
-    public function setUsers(?User $users): static
+    public function setUser(?User $users): static
     {
-        $this->users = $users;
+        $this->user = $users;
 
         return $this;
     }
