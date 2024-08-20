@@ -10,11 +10,11 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240820203723 extends AbstractMigration
+final class Version20240820210034 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'add employee and project table';
+        return 'add employee and project tables';
     }
 
     public function up(Schema $schema): void
@@ -38,6 +38,7 @@ final class Version20240820203723 extends AbstractMigration
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
+        $this->addSql('CREATE SCHEMA public');
         $this->addSql('DROP SEQUENCE employee_id_seq CASCADE');
         $this->addSql('DROP SEQUENCE project_id_seq CASCADE');
         $this->addSql('ALTER TABLE employee DROP CONSTRAINT FK_5D9F75A1A76ED395');

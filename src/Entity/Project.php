@@ -3,13 +3,30 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use App\Controller\CreateProjectAction;
 use App\Repository\ProjectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection(),
+        new Post(
+            controller: CreateProjectAction::class
+        ),
+        new Put(),
+        new Delete()
+    ]
+)]
 class Project
 {
     #[ORM\Id]
@@ -18,21 +35,21 @@ class Project
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 3, max: 255)]
     private ?string $name = null;
 
-    /**
-     * @var Collection<int, Employee>
-     */
     #[ORM\ManyToMany(targetEntity: Employee::class, inversedBy: 'projects')]
-    private Collection $developers;
+    private Collection $employees;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank]
     private ?User $customer = null;
 
     public function __construct()
     {
-        $this->developers = new ArrayCollection();
+        $this->employees = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -55,23 +72,23 @@ class Project
     /**
      * @return Collection<int, Employee>
      */
-    public function getDevelopers(): Collection
+    public function getEmployees(): Collection
     {
-        return $this->developers;
+        return $this->employees;
     }
 
-    public function addDeveloper(Employee $developer): static
+    public function addEmployee(Employee $employee): static
     {
-        if (!$this->developers->contains($developer)) {
-            $this->developers->add($developer);
+        if (!$this->employees->contains($employee)) {
+            $this->employees->add($employee);
         }
 
         return $this;
     }
 
-    public function removeDeveloper(Employee $developer): static
+    public function removeEmployee(Employee $employee): static
     {
-        $this->developers->removeElement($developer);
+        $this->employees->removeElement($employee);
 
         return $this;
     }
